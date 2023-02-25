@@ -10,5 +10,6 @@ namespace P01WebApi.Models
         public string descripcion { get; set; }
         public int? tipo_equipo_id { get; set; }
         public int? marca_id { get; set; }
+        public string estado { get; set; }
     }
 }
