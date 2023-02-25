@@ -20,6 +20,7 @@ namespace P01WebApi.Controllers
         [Route("getall")]
         public IActionResult get() {
             List<equipos> listadoEquipo =  (from e in _equiposContext.equipos
+                                            where e.estado =="A"
                                             select e).ToList();
             if(listadoEquipo.Count== 0) { return NotFound(); }
 
@@ -32,7 +33,7 @@ namespace P01WebApi.Controllers
         public IActionResult get(int id) 
         {
             equipos? unEquipo = (from e in _equiposContext.equipos
-                          where e.id_equipos == id
+                          where e.id_equipos == id && e.estado =="A"
                           select e).FirstOrDefault();
             if(unEquipo == null) 
                 return NotFound();
@@ -45,8 +46,9 @@ namespace P01WebApi.Controllers
         public IActionResult buscar(string filtro) 
         {
             List<equipos> equiposList = (from e in _equiposContext.equipos
-                                         where e.nombre.Contains(filtro)
-                                         || e.descripcion.Contains(filtro)
+                                         where (e.nombre.Contains(filtro)
+                                         || e.descripcion.Contains(filtro))
+                                         && e.estado=="A"
                                          select e).ToList();
 
             if(equiposList.Any())
@@ -57,13 +59,18 @@ namespace P01WebApi.Controllers
             return NotFound();
 
         }
-
+        /// <summary>
+        /// Metodo para cear un equipo nuevo
+        /// </summary>
+        /// <param name="equipoNuevo">clase de equipos</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("add")]
         public IActionResult Crear([FromBody] equipos equipoNuevo)
         {
             try
             {
+                equipoNuevo.estado = "A";
                 _equiposContext.equipos.Add(equipoNuevo);
                 _equiposContext.SaveChanges();
 
