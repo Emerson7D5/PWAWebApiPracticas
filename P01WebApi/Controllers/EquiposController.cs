@@ -15,6 +15,7 @@ namespace P01WebApi.Controllers
             _equiposContext = equiposContext;
         }
 
+
         [HttpGet]
         [Route("getall")]
         public IActionResult ObtenerEquipos() {
